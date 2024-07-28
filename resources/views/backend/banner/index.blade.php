@@ -57,14 +57,21 @@
                     <td>{{$item->description}}</td>
                     <td> <img src="{{ $item->photo }}" alt="{{ $item->photo }}" style="max-height: 98px; max-width:128px"></td>
                     <td>@if ($item->condition == 'banner')
-                        <span class="badge badge-success"> Banner</span>
+                        <span class="badge bg-success"> Banner</span>
                     @else
-                        <span class="badge badge-info"> Promotion</span>
+                        <span class="badge bg-info"> Promotion</span>
                     @endif
                 </td>
-                    <td> <input type="checkbox" name="checkbox1"></td>
+                    <td> 
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="toggle" value={{$item->id}}  data-toggle="switchbutton"  data-onlabel = "active" data-offlable="inactive" {{ $item->status == 'active' ? 'checked' : ''  }}>
+      
+                      </div>
+                    </td>
                     <td>
-                        {{$item->title}}
+                       <a href="" class="btn btn-sm btn-outline-info" data-toggle = "tooltip" title="edit" data-placement="bottom" ><i class="fas fa-edit"></i></a>
+
+                       <a href="" class="btn btn-sm btn-outline-danger" data-toggle = "tooltip" title="delete" data-placement="bottom" ><i class="fas fa-trash-alt"></i></a>
                     </td>
                   </tr>
                   @endforeach
@@ -95,4 +102,33 @@
     </section>
     <!-- /.content -->
   </div>
+
+  @endsection
+
+  @section('scripts')
+  <script> 
+   $("input[name='toggle']").change(function() {
+    var mode  = $(this).prop('checked')? 1 : 0;
+    var id = $(this).val();
+    $.ajax({
+      url:'{{ route("banner.status") }}',
+      type:'POST',
+      data:{
+        _token:'{{ csrf_token() }}',
+        mode:mode,
+        id:id
+      },
+
+      success:function(response){
+        console.log(response.status);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert(xhr.status);
+        alert(thrownError);
+      }
+    });
+  });
+
+  </script>
+
   @endsection

@@ -91,4 +91,26 @@ class BannerController extends Controller
     {
         //
     }
+
+
+    public function bannerStatus(Request $request){
+        \Log::info('Received request data:', $request->all());
+
+        // Validate the request
+        $request->validate([
+            'mode' => 'required|boolean',
+            'id' => 'required|integer'
+        ]);
+
+        // Assuming you have a Banner model to update the status
+        $banner = Banner::find($request->id);
+        if ($banner) {
+            $banner->status = $request->mode;
+            $banner->save();
+
+            return response()->json(['status' => 'success'], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Banner not found'], 404);
+        }
+    }
 }

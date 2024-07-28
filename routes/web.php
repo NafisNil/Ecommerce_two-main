@@ -30,4 +30,5 @@ Route::group(['prefix'=>'admin', 'middleware'=> 'auth'],function(){
         'banner' => BannerController::class,
        
     ]);
+    Route::post('banner_status',[BannerController::class, 'bannerStatus'])->name('banner.status');
 });
