@@ -23,7 +23,5 @@
 <!-- include summernote css/js -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
-<link href="/css/app.2022.test.min.css?v=202209282154" rel="stylesheet">
 
-<link href="/codepretty/styles/shCoreDefault.css" rel="stylesheet">
 

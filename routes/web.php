@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,7 +29,8 @@ Route::group(['prefix'=>'admin', 'middleware'=> 'auth'],function(){
     Route::get('/', [AdminController::class,'admin'])->name('admin');
     Route::resources([
         'banner' => BannerController::class,
-       
+       'category' => CategoryController::class
     ]);
     Route::post('banner_status',[BannerController::class, 'bannerStatus'])->name('banner.status');
+    Route::post('category_status',[CategoryController::class, 'categoryStatus'])->name('category.status');
 });

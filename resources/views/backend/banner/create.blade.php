@@ -61,8 +61,8 @@
                     <label for="exampleSelectBorder">Status <span class="text-danger">*</span></label>
 
                     <select class="custom-select form-control-border" id="exampleSelectBorder" name="status" required>
-                      <option value="active {{ old('status') == 'active' ? 'selected' : '' }}">Active</option>
-                      <option value="inactive {{ old('status') == 'inactive' ? 'selected' : '' }}">Inactive</option>
+                      <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                      <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
 
                     </select>
                   </div>
@@ -71,8 +71,8 @@
                     <label for="exampleSelectBorder">Condition <span class="text-danger">*</span></label>
 
                     <select class="custom-select form-control-border" id="exampleSelectBorder" name="condition" required>
-                      <option value="banner {{ old('condition') == 'banner' ? 'selected' : '' }}">Banner</option>
-                      <option value="promo {{ old('condition') == 'promo' ? 'selected' : '' }}">Promo</option>
+                      <option value="banner" {{ old('condition') == 'banner' ? 'selected' : '' }}>Banner</option>
+                      <option value="promo" {{ old('condition') == 'promo' ? 'selected' : '' }}>Promo</option>
 
                     </select>
                   </div>

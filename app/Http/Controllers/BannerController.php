@@ -74,6 +74,13 @@ class BannerController extends Controller
     public function edit(string $id)
     {
         //
+        $banner = Banner::find($id);
+        if ($banner) {
+            # code...
+            return view('backend.banner.edit', compact('banner'));
+        }else{
+            return back()->with('error', 'Data not found!');
+        }
     }
 
     /**
@@ -82,6 +89,29 @@ class BannerController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $banner = Banner::find($id);
+        if ($banner) {
+            $this->validate($request, [
+                'title' => 'required|string',
+                'description' => 'required',
+              //  'photo' => 'required',
+                'condition' => 'nullable|in:banner,promo',
+                'status' => 'nullable|in:active,inactive'
+            ]);
+            $data =  $request->all();
+           
+            $status = $banner->fill($data)->save();
+            if ($status) {
+                # code...
+                return redirect()->route('banner.index')->with('success', 'Data updated successfully!');
+            } else {
+                # code...
+                return back()->with('error', 'Something went wrong!');
+            }
+    
+        }else{
+            return back()->with('error', 'Data not found!');
+        }
     }
 
     /**
@@ -90,6 +120,19 @@ class BannerController extends Controller
     public function destroy(string $id)
     {
         //
+        $banner = Banner::find($id);
+        if ($banner) {
+            # code...
+            $status = $banner->delete();
+            if ($status) {
+                # code...
+                return redirect()->route('banner.index')->with('success', 'Banner successfully deleted!');
+            }else{
+                return back()->with('error', 'Data not found!');
+            }
+        }else{
+            return back()->with('error', 'Data not found!');
+        }
     }
 
 
@@ -101,14 +144,21 @@ class BannerController extends Controller
             'mode' => 'required|boolean',
             'id' => 'required|integer'
         ]);
-
+        
         // Assuming you have a Banner model to update the status
         $banner = Banner::find($request->id);
         if ($banner) {
-            $banner->status = $request->mode;
-            $banner->save();
+            if ($request->mode == 1) {
+                # code...
+                $banner->status = 'active';
+            }elseif ($request->mode == 0) {
+                # code...
+                $banner->status = 'inactive';
+            }
 
-            return response()->json(['status' => 'success'], 200);
+            $banner->save();
+            return response()->json(['status' => 'successfully updated!'], 200);
+
         } else {
             return response()->json(['status' => 'error', 'message' => 'Banner not found'], 404);
         }

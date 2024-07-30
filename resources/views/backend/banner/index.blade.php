@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>Banner  <a href="{{ route('banner.create') }}" class="btn btn-sm btn-outline-success"><i class="fa fa-plus-square"></i>Create Banner</a></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <li class="breadcrumb-item"><a href="{{ route('admin') }}">Home</a></li>
+              <li class="breadcrumb-item active">Banner</li>
             </ol>
           </div>
         </div>
@@ -29,10 +29,12 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Banner List</h3>
+                <h3 class="card-title">Banner List  <b>({{ \App\Models\Banner::count() }})</b></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                @include('backend.alert')
+                <br><br>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -54,7 +56,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{$item->title}}
                     </td>
-                    <td>{{$item->description}}</td>
+                    <td>{!! html_entity_decode($item->description) !!}</td>
                     <td> <img src="{{ $item->photo }}" alt="{{ $item->photo }}" style="max-height: 98px; max-width:128px"></td>
                     <td>@if ($item->condition == 'banner')
                         <span class="badge bg-success"> Banner</span>
@@ -69,9 +71,12 @@
                       </div>
                     </td>
                     <td>
-                       <a href="" class="btn btn-sm btn-outline-info" data-toggle = "tooltip" title="edit" data-placement="bottom" ><i class="fas fa-edit"></i></a>
-
-                       <a href="" class="btn btn-sm btn-outline-danger" data-toggle = "tooltip" title="delete" data-placement="bottom" ><i class="fas fa-trash-alt"></i></a>
+                       <a href="{{ route('banner.edit', $item->id) }}" class="btn btn-sm btn-outline-info float-left mr-1" data-toggle = "tooltip" title="edit" data-placement="bottom" ><i class="fas fa-edit"></i></a>
+                      <form action="{{ route('banner.destroy', $item->id) }}" method="post" class="float-left">
+                        @csrf
+                        @method('delete')
+                        <a href=""  class="dlBtn btn btn-sm btn-outline-danger" data-toggle = "tooltip" title="delete" data-placement="bottom"  data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
+                      </form>
                     </td>
                   </tr>
                   @endforeach
@@ -120,7 +125,11 @@
       },
 
       success:function(response){
-        console.log(response.status);
+        if (response.status) {
+          alert(response.status);
+        }else{
+          alert('something went wrong!');
+        }
       },
       error: function (xhr, ajaxOptions, thrownError) {
         alert(xhr.status);
@@ -130,5 +139,35 @@
   });
 
   </script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+$('.dlBtn').click(function (e) {
 
+  var form = $(this).closest('form');
+  var dataID = $(this).data('id');
+  e.preventDefault();
+  swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this imaginary file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    form.submit();
+    swal("Poof! Your imaginary file has been deleted!", {
+      icon: "success",
+    });
+  } else {
+    swal("Your imaginary file is safe!");
+  }
+});
+});
+</script>
   @endsection
