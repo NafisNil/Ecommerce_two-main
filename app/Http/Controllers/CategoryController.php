@@ -22,6 +22,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
+        return view('backend.categories.create');
     }
 
     /**
@@ -62,9 +63,46 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
+        $category = Category::find($id);
+        if ($category) {
+            # code...
+            $status = $category->delete();
+            if ($status) {
+                # code...
+                return redirect()->route('category.index')->with('success', 'Category successfully deleted!');
+            }else{
+                return back()->with('error', 'Data not found!');
+            }
+        }else{
+            return back()->with('error', 'Data not found!');
+        }
     }
 
     public function categoryStatus(Request $request){
+        \Log::info('Received request data:', $request->all());
+
+        // Validate the request
+        $request->validate([
+            'mode' => 'required|boolean',
+            'id' => 'required|integer'
+        ]);
         
+        // Assuming you have a Banner model to update the status
+        $category = Category::find($request->id);
+        if ($category) {
+            if ($request->mode == 1) {
+                # code...
+                $category->status = 'active';
+            }elseif ($request->mode == 0) {
+                # code...
+                $category->status = 'inactive';
+            }
+
+            $category->save();
+            return response()->json(['status' => 'successfully updated!'], 200);
+
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Banner not found'], 404);
+        }
     }
 }
