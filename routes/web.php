@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,8 +31,13 @@ Route::group(['prefix'=>'admin', 'middleware'=> 'auth'],function(){
     Route::get('/', [AdminController::class,'admin'])->name('admin');
     Route::resources([
         'banner' => BannerController::class,
-       'category' => CategoryController::class
+       'category' => CategoryController::class,
+       'brand' => BrandController::class,
+       'product' => ProductController::class
     ]);
     Route::post('banner_status',[BannerController::class, 'bannerStatus'])->name('banner.status');
     Route::post('category_status',[CategoryController::class, 'categoryStatus'])->name('category.status');
+    Route::post('category/{id}/child',[CategoryController::class,'getChidByParentId']);
+    Route::post('brand_status',[BrandController::class, 'brandStatus'])->name('brand.status');
+    Route::post('product_status',[ProductController::class, 'productStatus'])->name('product.status');
 });

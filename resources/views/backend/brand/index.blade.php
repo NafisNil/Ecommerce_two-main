@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Category  <a href="{{ route('category.create') }}" class="btn btn-sm btn-outline-success"><i class="fa fa-plus-square"></i>Create Category</a></h1>
+            <h1>Brand  <a href="{{ route('brand.create') }}" class="btn btn-sm btn-outline-success"><i class="fa fa-plus-square"></i>Create Brand</a></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('admin') }}">Home</a></li>
-              <li class="breadcrumb-item active">Category</li>
+              <li class="breadcrumb-item active">Brand</li>
             </ol>
           </div>
         </div>
@@ -29,7 +29,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Category List  <b>({{ \App\Models\Category::count() }})</b></h3>
+                <h3 class="card-title">Banner List  <b>({{ \App\Models\Brand::count() }})</b></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -40,28 +40,27 @@
                   <tr>
                     <th>#</th>
                     <th>Title</th>
-                    <th>Summary</th>
+                    <th>Slug</th>
+                  
                     <th>Photo</th>
-                    <th>Is Parent</th>
-                    <th>Parents</th>
+                 
                     <th>Status</th>
                     <th>Action</th>
 
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($categories as $item)
+                    @foreach ($brands as $item)
 
 
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{$item->title}}
                     </td>
-                    <td>{!! substr(html_entity_decode($item->summary),0,50) !!}...</td>
-
+                    <td>{{$item->slug}}</td>
+              
                     <td> <img src="{{ $item->photo }}" alt="{{ $item->photo }}" style="max-height: 98px; max-width:128px"></td>
-                    <td>{{ $item->is_parent === 1 ? 'Yes' : 'No' }}</td>
-                    <td>{{ \App\Models\Category::where('id', $item->parent_id)->value('title') }}</td>
+
                     <td> 
                       <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="toggle" value={{$item->id}}  data-toggle="switchbutton"  data-onlabel = "active" data-offlable="inactive" {{ $item->status == 'active' ? 'checked' : ''  }}>
@@ -69,8 +68,8 @@
                       </div>
                     </td>
                     <td>
-                       <a href="{{ route('category.edit', $item->id) }}" class="btn btn-sm btn-outline-info float-left mr-1" data-toggle = "tooltip" title="edit" data-placement="bottom" ><i class="fas fa-edit"></i></a>
-                      <form action="{{ route('category.destroy', $item->id) }}" method="post" class="float-left">
+                       <a href="{{ route('brand.edit', $item->id) }}" class="btn btn-sm btn-outline-info float-left mr-1" data-toggle = "tooltip" title="edit" data-placement="bottom" ><i class="fas fa-edit"></i></a>
+                      <form action="{{ route('brand.destroy', $item->id) }}" method="post" class="float-left">
                         @csrf
                         @method('delete')
                         <a href=""  class="dlBtn btn btn-sm btn-outline-danger" data-toggle = "tooltip" title="delete" data-placement="bottom"  data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
@@ -84,10 +83,10 @@
                   <tr>
                     <th>#</th>
                     <th>Title</th>
-                    <th>Summary</th>
+                    <th>Slug</th>
+                   
                     <th>Photo</th>
-                    <th>Is Parent</th>
-                    <th>Parents</th>
+                  
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -115,7 +114,7 @@
     var mode  = $(this).prop('checked')? 1 : 0;
     var id = $(this).val();
     $.ajax({
-      url:'{{ route("category.status") }}',
+      url:'{{ route("brand.status") }}',
       type:'POST',
       data:{
         _token:'{{ csrf_token() }}',

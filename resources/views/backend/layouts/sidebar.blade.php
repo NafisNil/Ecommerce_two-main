@@ -175,45 +175,47 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Products
+                Brand
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="{{ route('brand.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Departments</p>
+                  <p>All Brand</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="{{ route('brand.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Departments</p>
+                  <p>Add Brand</p>
                 </a>
               </li>
 
             </ul>
+
+
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Cart
+                Product
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="{{ route('product.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Departments</p>
+                  <p>All product</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="{{ route('product.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Departments</p>
+                  <p>Add Product</p>
                 </a>
               </li>
 

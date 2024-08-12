@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Category Form</h1>
+            <h1>Brand Form</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('admin') }}">Home</a></li>
-              <li class="breadcrumb-item active">Category Form</li>
+              <li class="breadcrumb-item active">Brand Form</li>
             </ol>
           </div>
         </div>
@@ -32,13 +32,13 @@
 
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Category Form</h3>
+                <h3 class="card-title">Brand Form</h3>
               </div>
               <!-- /.card-header -->
 
               <!-- form start -->
 
-              <form class="form-horizontal" action="{{ route('category.store') }}" method="POST">
+              <form class="form-horizontal" action="{{ route('brand.store') }}" method="POST">
                 @csrf
                 <br>
                 @include('backend.alert')
@@ -50,30 +50,7 @@
                       <input type="text" class="form-control" id="" placeholder="title" name="title" value="{{ old('title') }}" required>
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Summary <span class="text-danger">*</span></label>
-                    <div class="col-sm-10">
-                      <textarea name="summary" id="description" cols="30" rows="5" class="form-control" >{{ old('summary') }}</textarea>
-                    </div>
-                  </div>
 
-                  <div class="form-group pl-3">
-                    <label for="exampleSelectBorder">Is Parent <span class="text-danger">*</span></label>
-
-                    <input type="checkbox" name="is_parent" id="is_parent" value="1"  checked> Yes
-                  </div>
-
-
-                  <div class="form-group pl-3 d-none" id="parent_cat_div" >
-                    <label for="exampleSelectBorder">Parent Category <span class="text-danger">*</span></label>
-
-                    <select class="custom-select form-control-border" id="" name="parent_id" >
-                      <option value="" >Select Category</option>
-                    @foreach ($parent_cats as $item)
-                    <option value="{{ $item->id }}" {{ old('parent_id') ==$item->id? 'selected' : '' }}>{{ $item->title }}</option>
-                    @endforeach
-                    </select>
-                  </div>
 
                   <div class="form-group pl-3">
                     <label for="exampleSelectBorder">Status <span class="text-danger">*</span></label>
@@ -136,17 +113,5 @@
         $('#description').summernote();
     });
 
-</script>
-<script>
-        $('#is_parent').change(function(e){
-          e.preventDefault();
-          var is_checked = $(this).prop('checked');
-          if (is_checked) {
-            $('#parent_cat_div').addClass('d-none');
-            $('#parent_cat_div').val();
-          } else {
-            $('#parent_cat_div').removeClass('d-none');
-          }
-        });
 </script>
 @endsection

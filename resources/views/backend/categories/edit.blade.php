@@ -38,7 +38,7 @@
 
               <!-- form start -->
 
-              <form class="form-horizontal" action="{{ route('category.update', $banner->id) }}" method="POST">
+              <form class="form-horizontal" action="{{ route('category.update', $category->id) }}" method="POST">
                 @csrf
                 @method('patch')
                 <br>
@@ -48,27 +48,36 @@
                   <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-2 col-form-label">Title <span class="text-danger">*</span></label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="" placeholder="title" name="title" value="{{ @$banner->title }}" required>
+                      <input type="text" class="form-control" id="" placeholder="title" name="title" value="{{ @$category->title }}" required>
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Description <span class="text-danger">*</span></label>
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Summary <span class="text-danger">*</span></label>
                     <div class="col-sm-10">
-                      <textarea name="description" id="description" cols="30" rows="5" class="form-control" >{!! html_entity_decode(@$banner->description) !!}</textarea>
+                      <textarea name="summary" id="description" cols="30" rows="5" class="form-control" >{!! html_entity_decode(@$category->summary) !!}</textarea>
                     </div>
                   </div>
 
+                  <div class="form-group pl-3">
+                    <label for="exampleSelectBorder">Is Parent <span class="text-danger">*</span></label>
+
+                    <input type="checkbox" name="is_parent" id="is_parent" value="1"  {{ @$category->is_parent == '1' ? 'checked' : '' }}> Yes
+                  </div>
 
 
-                  <div class="form-group row pl-3">
-                    <label for="exampleSelectBorder">Condition <span class="text-danger">*</span></label>
+               
 
-                    <select class="custom-select form-control-border" id="exampleSelectBorder" name="condition" required>
-                      <option value="banner"{{ @$banner->condition == 'banner' ? 'selected' : '' }}>Banner</option>
-                      <option value="promo"{{ @$banner->condition == 'promo' ? 'selected' : '' }}>Promo</option>
+                  <div class="form-group pl-3 {{ $category->is_parent == '1'? 'd-none':''}} " id="parent_cat_div" >
+                    <label for="exampleSelectBorder">Parent Category <span class="text-danger">*</span></label>
 
+                    <select class="custom-select form-control-border" id="" name="parent_id" >
+                      <option value="" >Select Category</option>
+                    @foreach ($parent_cats as $item)
+                    <option value="{{ $item->id }}"  {{ @$category->parent_id == $item->id ? 'selected' : '' }}>{{ $item->title }}</option>
+                    @endforeach
                     </select>
                   </div>
+
                   <div class="form-group row pl-3">
 
                     <div class="input-group">
@@ -77,7 +86,7 @@
                             <i class="fa fa-picture-o"></i> Choose
                           </a>
                         </span>
-                        <input id="thumbnail" class="form-control" type="text" name="photo" value="{{ $banner->photo }}">
+                        <input id="thumbnail" class="form-control" type="text" name="photo" value="{{ $category->photo }}">
                       </div>
                       <div id="holder" style="margin-top:15px;max-height:100px;"></div>
 
@@ -120,5 +129,18 @@
         $('#description').summernote();
     });
 
+</script>
+<script>
+
+  $('#is_parent').change(function(e){
+    e.preventDefault();
+    var is_checked = $(this).prop('checked');
+    if (is_checked) {
+      $('#parent_cat_div').addClass('d-none');
+      $('#parent_cat_div').val();
+    } else {
+      $('#parent_cat_div').removeClass('d-none');
+    }
+  });
 </script>
 @endsection
