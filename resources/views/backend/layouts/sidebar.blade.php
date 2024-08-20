@@ -225,21 +225,21 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Posdt
+                User
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="{{ route('user.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Departments</p>
+                  <p>All Users</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="{{ route('user.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Departments</p>
+                  <p>Add Users</p>
                 </a>
               </li>
 

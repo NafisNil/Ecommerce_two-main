@@ -117,6 +117,14 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         //
+        $product = Product::find($id);
+        if ($product) {
+            # code...
+            return view('backend.product.edit', compact('product'));
+        } else {
+            # code...
+            return back()->with('status', 'No data found!');
+        }
     }
 
     /**
@@ -125,6 +133,38 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $product = Product::find($id);
+        if ($product) {
+            # code...
+            $this->validate($request, [
+            'title' => 'string|required',
+            'summary' => 'string|required',
+            'description' => 'string|required',
+            'stock' =>  'nullable|numeric',
+            'price' =>  'nullable|numeric',
+            'discount' =>  'nullable|numeric',
+            'photo' => 'required',
+            'cat_id' => 'required',
+            'size' => 'nullable',
+            'condition' => 'nullable',
+            'status' => 'nullable|in:active,inactive',
+            ]);
+          
+            $data =  $request->all();
+            $data['offer_price'] = ($request->price-(($request->price * $request->discount)/100));
+            $status = $product->fill($data)->save();
+           // return $data;
+            if ($status) {
+                # code...
+                return redirect()->route('product.index')->with('success', 'Data updated successfully!');
+            } else {
+                # code...
+                return back()->with('error', 'Something went wrong!');
+            }
+        } else {
+            # code...
+            return back()->with('status', 'No data found!');
+        }
     }
 
     /**
@@ -133,6 +173,20 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+        $product = Product::find($id);
+      
+        if ($product) {
+            # code...
+            $status = $product->delete();
+            if ($status) {
+                # code...
+                return redirect()->route('product.index')->with('success', 'Product successfully deleted!');
+            }else{
+                return back()->with('error', 'Data not found!');
+            }
+        }else{
+            return back()->with('error', 'Data not found!');
+        }
     }
 
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\frontend\IndexController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +19,9 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[IndexController::class, 'home'])->name('home');
+//product category
+Route::get('/product-cat/{slug}', [IndexController::class, 'productCategory'])->name('product_category');
 
 Auth::routes(['register'=>false]);
 
@@ -33,11 +35,13 @@ Route::group(['prefix'=>'admin', 'middleware'=> 'auth'],function(){
         'banner' => BannerController::class,
        'category' => CategoryController::class,
        'brand' => BrandController::class,
-       'product' => ProductController::class
+       'product' => ProductController::class,
+       'user' => UserController::class
     ]);
     Route::post('banner_status',[BannerController::class, 'bannerStatus'])->name('banner.status');
     Route::post('category_status',[CategoryController::class, 'categoryStatus'])->name('category.status');
     Route::post('category/{id}/child',[CategoryController::class,'getChidByParentId']);
     Route::post('brand_status',[BrandController::class, 'brandStatus'])->name('brand.status');
     Route::post('product_status',[ProductController::class, 'productStatus'])->name('product.status');
+    Route::post('user_status',[UserController::class, 'userStatus'])->name('user.status');
 });

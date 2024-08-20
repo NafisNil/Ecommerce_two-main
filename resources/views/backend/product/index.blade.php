@@ -52,13 +52,16 @@
                   </thead>
                   <tbody>
                     @foreach ($products as $item)
-
+                    @php
+                        $photo = explode(',' , $item->photo);
+                    @endphp
 
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{$item->title}}
+                    
                     </td>
-                    <td> <img src="{{ $item->photo }}" alt="{{ $item->photo }}" style="max-height: 98px; max-width:128px"></td>
+                    <td> <img src="{{ $photo[0] }}" alt="{{ $item->photo }}" style="max-height: 98px; max-width:128px"></td>
                     <td>{{number_format($item->price, 2)}}
                     </td>
 
@@ -113,13 +116,17 @@
          <p>{!! html_entity_decode($item->description)!!}</p>
          <hr>
          <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <strong>Price : </strong>
             <p>{{number_format($item->price, 2)}}</p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <strong>Price : </strong>
             <p>{{number_format($item->offer_price, 2)}}</p>
+          </div>
+          <div class="col-md-4">
+            <strong>Stock : </strong>
+            <p>{{$item->stock}}</p>
           </div>
          </div>
 

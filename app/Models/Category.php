@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Product;
 class Category extends Model
 {
     use HasFactory;
@@ -15,5 +15,15 @@ class Category extends Model
 
     public static function getChidByParentId($id){
         return Category::where('parent_id', $id)->get();
+    }
+
+    /**
+     * Get all of the comments for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'cat_id', 'id');
     }
 }
