@@ -1790,7 +1790,7 @@ textarea:focus,
 /* Footer Area */
 .footer_area {
   position: relative;
-  z-index: 1;
+  z-index: 0;
   background-color: #1d2536; }
   .footer_area .single_footer_area {
     position: relative;
@@ -3828,3 +3828,6 @@ button.mfp-arrow {
     -o-transition-duration: 500ms;
     transition-duration: 500ms;
     box-shadow: 0 0 8px 0 rgba(47, 91, 234, 0.125); }
+.shortcodes_content{
+  z-index: 6;
+}

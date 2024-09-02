@@ -14,6 +14,11 @@
     @include('frontend.layouts.header')
     <!-- Header Area End -->
     <!-- Welcome Slides Area -->
+    <div class="row">
+        <div class="col-md-12">
+            @include('backend.alert')
+        </div>
+    </div>
     @yield('content')
     <!-- Footer Area -->
     @include('frontend.layouts.footer')

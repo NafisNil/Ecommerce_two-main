@@ -81,8 +81,8 @@
                     <div class="col-12">
                         <h5>Shop Grid</h5>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="../bigshop-2.3.0/index.html">Home</a></li>
-                            <li class="breadcrumb-item active">Shop Grid</li>
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
+                            <li class="breadcrumb-item active"> {{ $category->title }}</li>
                         </ol>
                     </div>
                 </div>
@@ -103,92 +103,24 @@
                                     <a href="../bigshop-2.3.0/shop-list-left-sidebar.html" data-toggle="tooltip" data-placement="top" title="List View"><i class="icofont-listine-dots"></i></a>
                                 </div>
                             </div>
-                            <select class="small right">
-                                <option selected>Short by Popularity</option>
-                                <option value="1">Short by Newest</option>
-                                <option value="2">Short by Sales</option>
-                                <option value="3">Short by Ratings</option>
+                            <select id="sortBy" class="small right">
+                                <option selected>Default</option>
+                                <option value="priceAsc" {{ old('sortBy') == 'priceAsc' ? 'selected' : '' }}>Price :Low to High</option>
+                                <option value="priceDesc" {{ old('sortBy') == 'priceDesc' ? 'selected' : '' }}>Price :High to Low</option>
+                                <option value="titleAsc" {{ old('sortBy') == 'titleAsc' ? 'selected' : '' }}>Title :Ascending</option>
+                                <option value="titleDesc" {{ old('sortBy') == 'titleDesc' ? 'selected' : '' }}>Title :Descending</option>
+                                <option value="discAsc" {{ old('sortBy') == 'discAsc' ? 'selected' : '' }}>Discount :Low to High</option>
+                                <option value="discDesc" {{ old('sortBy') == 'discDesc' ? 'selected' : '' }}>Discount :High to Low</option>
                             </select>
                         </div>
                         <div class="shop_grid_product_area">
-                            <div class="row justify-content-center">
-                                @if (count($category->products) > 0)
-                                      <!-- Single Product -->
-                                      @foreach ($category->products as $item)
-                                      <div class="col-9 col-sm-12 col-md-6 col-lg-4">
-                                        <div class="single-product-area mb-30">
-                                            <div class="product_image">
-                                                @php
-                                                    $photo = explode(',', $item->photo);
-                                                @endphp
-                                                <!-- Product Image -->
-                                                <img class="normal_img" src="{{ $photo[0] }}" alt="">
-                                                <img class="hover_img" src="{{ @$photo[1] }}" alt="">
-                                                <!-- Product Badge -->
-                                                <div class="product_badge">
-                                                    @if ($item->conditions == 'winter')
-                                                    <span style="color: rgb(20, 252, 98)">{{ $item->conditions }}</span>
-                                                    @elseif ($item->conditions == 'new')
-                                                    <span style="color: rgb(255, 27, 27)">{{ $item->conditions }}</span>
-                                                    @else
-                                                    <span style="color: rgb(5, 255, 251)">{{ $item->conditions }}</span>
-                                                    @endif
-                                                    
-                                                </div>
-                                                <!-- Wishlist -->
-                                                <div class="product_wishlist">
-                                                    <a href="../bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                                                </div>
-                                                <!-- Compare -->
-                                                <div class="product_compare">
-                                                    <a href="../bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
-                                                </div>
-                                            </div>
-                                            <!-- Product Description -->
-                                            <div class="product_description">
-                                                <!-- Add to cart -->
-                                                <div class="product_add_to_cart">
-                                                    <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                                                </div>
-                                                <!-- Quick View -->
-                                                <div class="product_quick_view">
-                                                    <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                                                </div>
-                                                <p class="brand_name">{{ App\Models\Brand::where('id', $item->brand_id)->value('title') }}</p>
-                                                <a href="#">{{ ucfirst($item->title) }}</a>
-                                                <h6 class="product-price">${{ number_format($item->offer_price, 2) }} <del class="text-danger">${{ number_format(@$item->price, 2) }}</del></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                
-                                @else
-                                    <h4 class="text-secondary"> No product found!</h4>
-                                @endif
-                              
-
+                            <div class="row justify-content-center" id="product-data">
+                                @include('frontend.layouts._single-product')
                             </div>
                         </div>
                         <!-- Shop Pagination Area -->
-                        <div class="shop_pagination_area mt-30 mb-30">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination pagination-sm justify-content-center">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">8</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">9</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <div class="ajax-load text-center" style="display:none">
+                            <img src="{{ asset('frontend/loader.gif') }}" alt="loader" style="max-width:10%;max-height:10%">
                         </div>
                     </div>
                     <div class="col-12 col-sm-5 col-md-4 col-lg-3">
@@ -332,4 +264,42 @@
             </div>
         </section>
         <!-- Footer Area -->
+@endsection
+@section('scripts')
+    <script>
+        $('#sortBy').change(function(){
+            var sort = $('#sortBy').val();
+            window. location="{{url(''.$route. '')}}/{{$category->slug}}?sort="+sort;
+        });
+    </script>
+    <script>
+        function loadermore(page){
+            $.ajax({
+                url:'?page='+page,
+                type:get,
+                beforeSend:function(){
+                    $('ajax-load').show();
+                }
+            }).done(function(data){
+                if (data.html == '') {
+                    $('.ajax-load').html('No more product available!');
+                    return;
+                }
+                $('.ajax-load').hide();
+                $('#product-data').append(data.html);
+            }).fail(function(){
+                alert('something went wrong!');
+            });
+
+            var page = 1;
+            $(window).scroll(function(){
+                if ($(window).scrollTop() + $(window).height() + 120 >= $(document).height()) {
+                    page ++;
+                    loadmoreData(page);
+                }
+            })
+
+            
+        }
+    </script>
 @endsection

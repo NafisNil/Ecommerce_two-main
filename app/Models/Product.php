@@ -13,4 +13,8 @@ class Product extends Model
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
+
+    public function rel_product(){
+        return $this->hasMany('App\Models\Product', 'cat_id', 'cat_id')->where('status','active')->limit(8);
+    }
 }

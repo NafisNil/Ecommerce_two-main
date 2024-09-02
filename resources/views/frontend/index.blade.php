@@ -128,194 +128,74 @@
     </div>
 </div>
 <!-- Quick View Modal Area -->
+@php
+    $new_products = App\Models\Product::where(['status'=>'active', 'conditions'=>'new'])->orderBy('id','desc')->limit('8')->get();
+@endphp
+@if (count($new_products) > 0)
 <!-- New Arrivals Area -->
-<section class="new_arrivals_area section_padding_100 clearfix">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section_heading new_arrivals">
-                    <h5>New Arrivals</h5>
+    <section class="new_arrivals_area section_padding_100 clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section_heading new_arrivals">
+                        <h5>New Arrivals</h5>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="new_arrivals_slides owl-carousel">
-                    <!-- Single Product -->
-                    <div class="single-product-area">
-                        <div class="product_image">
-                            <!-- Product Image -->
-                            <img class="normal_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-1-back.png" alt="">
-                            <img class="hover_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-1.png" alt="">
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span>New</span>
+            <div class="row">
+                <div class="col-12">
+                    <div class="new_arrivals_slides owl-carousel">
+                        @foreach ($new_products as $item)
+                                  <!-- Single Product -->
+                        <div class="single-product-area">
+                            <div class="product_image">
+                                <!-- Product Image -->
+                                @php
+                                    $photo = explode(',', $item->photo);
+                                @endphp
+                                <img class="normal_img" src={{ $photo[0] }} alt="">
+                                <img class="hover_img" src="{{ @$photo[1] }} alt="">
+                                <!-- Product Badge -->
+                                <div class="product_badge">
+                                    @if ($item->conditions == 'winter')
+                                    <span style="color: rgb(20, 252, 98)">{{ $item->conditions }}</span>
+                                    @elseif ($item->conditions == 'new')
+                                    <span style="color: rgb(255, 27, 27)">{{ $item->conditions }}</span>
+                                    @else
+                                    <span style="color: rgb(5, 255, 251)">{{ $item->conditions }}</span>
+                                    @endif
+                                </div>
+                                <!-- Wishlist -->
+                                <div class="product_wishlist">
+                                    <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
+                                </div>
+                                <!-- Compare -->
+                                <div class="product_compare">
+                                    <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
+                                </div>
                             </div>
-                            <!-- Wishlist -->
-                            <div class="product_wishlist">
-                                <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                            </div>
-                            <!-- Compare -->
-                            <div class="product_compare">
-                                <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product_description">
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                            </div>
-                            <!-- Quick View -->
-                            <div class="product_quick_view">
-                                <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                            </div>
-                            <p class="brand_name">Top</p>
-                            <a href="#">Boutique Silk Dress</a>
-                            <h6 class="product-price">$48.99</h6>
-                        </div>
-                    </div>
-                    <!-- Single Product -->
-                    <div class="single-product-area">
-                        <div class="product_image">
-                            <!-- Product Image -->
-                            <img class="normal_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-6.png" alt="">
-                            <img class="hover_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-6-back.png" alt="">
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span>New</span>
-                            </div>
-                            <!-- Wishlist -->
-                            <div class="product_wishlist">
-                                <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                            </div>
-                            <!-- Compare -->
-                            <div class="product_compare">
-                                <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
+                            <!-- Product Description -->
+                            <div class="product_description">
+                                <!-- Add to cart -->
+                                <div class="product_add_to_cart">
+                                    <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
+                                </div>
+                                <!-- Quick View -->
+                                <div class="product_quick_view">
+                                    <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
+                                </div>
+                                <p class="brand_name">{{ App\Models\Brand::where('id', $item->brand_id)->value('title') }}</p>
+                                <a href="{{ route('product.details', $item->slug) }}">{{ ucfirst($item->title) }}</a>
+                                <h6 class="product-price">${{ number_format($item->offer_price, 2) }} <del class="text-danger">${{ number_format(@$item->price, 2) }}</del></h6>
                             </div>
                         </div>
-                        <!-- Product Description -->
-                        <div class="product_description">
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                            </div>
-                            <!-- Quick View -->
-                            <div class="product_quick_view">
-                                <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                            </div>
-                            <p class="brand_name">Lim</p>
-                            <a href="#">Gracia Plaid Dress</a>
-                            <h6 class="product-price">$17.63</h6>
-                        </div>
-                    </div>
-                    <!-- Single Product -->
-                    <div class="single-product-area">
-                        <div class="product_image">
-                            <!-- Product Image -->
-                            <img class="normal_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-2.png" alt="">
-                            <img class="hover_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-2-back.png" alt="">
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span>New</span>
-                            </div>
-                            <!-- Wishlist -->
-                            <div class="product_wishlist">
-                                <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                            </div>
-                            <!-- Compare -->
-                            <div class="product_compare">
-                                <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product_description">
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                            </div>
-                            <!-- Quick View -->
-                            <div class="product_quick_view">
-                                <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                            </div>
-                            <p class="brand_name">Sarah</p>
-                            <a href="#">Flower Textured Dress</a>
-                            <h6 class="product-price">$24 <span>$49</span></h6>
-                        </div>
-                    </div>
-                    <!-- Single Product -->
-                    <div class="single-product-area">
-                        <div class="product_image">
-                            <!-- Product Image -->
-                            <img class="normal_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-4.png" alt="">
-                            <img class="hover_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-4-back.png" alt="">
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span>New</span>
-                            </div>
-                            <!-- Wishlist -->
-                            <div class="product_wishlist">
-                                <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                            </div>
-                            <!-- Compare -->
-                            <div class="product_compare">
-                                <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product_description">
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                            </div>
-                            <!-- Quick View -->
-                            <div class="product_quick_view">
-                                <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                            </div>
-                            <p class="brand_name">Lim</p>
-                            <a href="#">Gracia Plaid Dress</a>
-                            <h6 class="product-price">$78.24</h6>
-                        </div>
-                    </div>
-                    <!-- Single Product -->
-                    <div class="single-product-area">
-                        <div class="product_image">
-                            <!-- Product Image -->
-                            <img class="normal_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-5.png" alt="">
-                            <img class="hover_img" src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/new-5-back.png" alt="">
-                            <!-- Product Badge -->
-                            <div class="product_badge">
-                                <span>New</span>
-                            </div>
-                            <!-- Wishlist -->
-                            <div class="product_wishlist">
-                                <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
-                            </div>
-                            <!-- Compare -->
-                            <div class="product_compare">
-                                <a href="bigshop-2.3.0/compare.html"><i class="icofont-exchange"></i></a>
-                            </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product_description">
-                            <!-- Add to cart -->
-                            <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
-                            </div>
-                            <!-- Quick View -->
-                            <div class="product_quick_view">
-                                <a href="#" data-toggle="modal" data-target="#quickview"><i class="icofont-eye-alt"></i> Quick View</a>
-                            </div>
-                            <p class="brand_name">Lim</p>
-                            <a href="#">Gracia Plaid Dress</a>
-                            <h6 class="product-price">$34 <span>$48</span></h6>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>    
+@endif
 <!-- New Arrivals Area -->
 <!-- Featured Products Area -->
 <section class="featured_product_area">

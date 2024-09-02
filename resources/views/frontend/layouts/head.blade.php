@@ -10,3 +10,4 @@
     <link rel="icon" href="{{ asset('frontend') }}/bigshop-2.3.0/img/core-img/favicon.ico">
     <!-- Style CSS -->
     <link rel="stylesheet" href="{{ asset('frontend') }}/bigshop-2.3.0/style.css">
+    @yield('styles')

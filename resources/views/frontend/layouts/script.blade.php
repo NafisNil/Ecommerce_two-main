@@ -15,3 +15,10 @@
 <script src="{{ asset('frontend') }}/bigshop-2.3.0/js/jquery.nice-select.min.js"></script>
 <script src="{{ asset('frontend') }}/bigshop-2.3.0/js/wow.min.js"></script>
 <script src="{{ asset('frontend') }}/bigshop-2.3.0/js/default/active.js"></script>
+
+<script>
+    setTimeout(() => {
+        $('#alert').slideup();
+    }, 4000);
+</script>
+@yield('scripts')
