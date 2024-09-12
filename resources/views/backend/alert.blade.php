@@ -16,3 +16,9 @@
     <span class="text-white"> {{ session('status') }}</span>
     </div>
 @endif
+
+@if (session('error'))
+<div class="bg-danger p-1 m-2 alert alert-dismissible close"  id="alert" data-dismiss="alert">
+    <span class="text-white"> {{ session('error') }}</span>
+    </div>
+@endif

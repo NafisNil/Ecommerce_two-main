@@ -36,11 +36,11 @@
                                 <div class="col-12 col-lg-6 mb-5 mb-lg-0">
                                     <h6 class="mb-3">Billing Address</h6>
                                     <address>
-                                        MD NAZRUL ISLAM <br>
-                                        Madhabdi, Narsingdi <br>
-                                        Madhabdi <br>
-                                        Narsingdi <br>
-                                        1600
+                                        {{ $user->full_name }}<br>
+                                       {!! $user->address !!}<br>
+                                        {{ $user->state }} , {{ $user->city }} <br>
+                                        {{ $user->country }} <br>
+                                        {{ $user->postcode }}
                                     </address>
                                     <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Edit Address</a>
 
@@ -68,22 +68,22 @@
 
                                                                 <div class="form-group">
                                                                     <label for="">Country</label>
-                                                                    <input type="text" name="country" class="form-control" placeholder="eg. Bangladesh">
+                                                                    <input type="text" name="country" class="form-control" placeholder="eg. Bangladesh" value="{{ $user->country }}">
                                                                 </div>
 
                                                                 <div class="form-group">
                                                                     <label for="">Postcode</label>
-                                                                    <input type="text" name="postcode" class="form-control" placeholder="eg. 1215">
+                                                                    <input type="text" name="postcode" class="form-control" placeholder="eg. 1215" value="{{ $user->posstcode }}">
                                                                 </div>
 
                                                                 <div class="form-group">
                                                                     <label for="">State</label>
-                                                                    <input type="text" name="state" class="form-control" placeholder="eg. Dhaka">
+                                                                    <input type="text" name="state" class="form-control" placeholder="eg. Dhaka" value="{{ $user->state }}">
                                                                 </div>
 
                                                                 <div class="form-group">
                                                                     <label for="">City</label>
-                                                                    <input type="text" name="city" class="form-control" placeholder="eg. Dhaka">
+                                                                    <input type="text" name="city" class="form-control" placeholder="eg. Dhaka" value="{{ $user->city }}">
                                                                 </div>
                                                         
                                                     </div>
@@ -102,7 +102,11 @@
                                 <div class="col-12 col-lg-6">
                                     <h6 class="mb-3">Shipping Address</h6>
                                     <address>
-                                        You have not set up this type of address yet.
+                                        {{ $user->full_name }}<br>
+                                       {!! $user->saddress !!}<br>
+                                        {{ $user->sstate }} , {{ $user->scity }} <br>
+                                        {{ $user->scountry }} <br>
+                                        {{ $user->spostcode }}
                                     </address>
                                     <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSAddress">Edit  Address</a>
                                                        <!-- Modal -->
@@ -120,31 +124,31 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form action="" method="post">
+                                                                        <form action="{{ route('shipping.address', $user->id) }}" method="post">
                                                                             @csrf
                                                                                 <div class="form-group">
                                                                                     <label for="">Shipping Address</label>
-                                                                                    <textarea name="address" id="" cols="20" class="form-control" rows="10">{{ $user->address }}</textarea>
+                                                                                    <textarea name="saddress" id="" cols="20" class="form-control" rows="10">{{ $user->saddress }}</textarea>
                                                                                 </div>
                 
                                                                                 <div class="form-group">
                                                                                     <label for="">Shipping Country</label>
-                                                                                    <input type="text" name="country" class="form-control" placeholder="eg. Bangladesh">
+                                                                                    <input type="text" name="scountry" class="form-control" placeholder="eg. Bangladesh" value="{{ $user->saddress }}">
                                                                                 </div>
                 
                                                                                 <div class="form-group">
                                                                                     <label for="">Shipping Postcode</label>
-                                                                                    <input type="text" name="postcode" class="form-control" placeholder="eg. 1215">
+                                                                                    <input type="text" name="spostcode" class="form-control" placeholder="eg. 1215" value="{{ $user->spostcode }}">
                                                                                 </div>
                 
                                                                                 <div class="form-group">
                                                                                     <label for="">Shipping State</label>
-                                                                                    <input type="text" name="state" class="form-control" placeholder="eg. Dhaka">
+                                                                                    <input type="text" name="sstate" class="form-control" placeholder="eg. Dhaka" value="{{ $user->sstate }}">
                                                                                 </div>
                 
                                                                                 <div class="form-group">
                                                                                     <label for="">Shipping City</label>
-                                                                                    <input type="text" name="city" class="form-control" placeholder="eg. Dhaka">
+                                                                                    <input type="text" name="scity" class="form-control" placeholder="eg. Dhaka" value="{{ $user->scity }}">
                                                                                 </div>
                                                                         
                                                                     </div>

@@ -266,12 +266,55 @@
         <!-- Footer Area -->
 @endsection
 @section('scripts')
+
     <script>
         $('#sortBy').change(function(){
             var sort = $('#sortBy').val();
             window. location="{{url(''.$route. '')}}/{{$category->slug}}?sort="+sort;
         });
     </script>
+    {{-- add to cart --}}
+        <script>
+            $(document).on('click', '.add_to_cart',function(e){
+                e.preventDefault();
+                var product_id = $(this).data('product-id');
+                var product_qty = $(this).data('quantity');
+                var token = "{{ csrf_token() }}";
+                var path = "{{ route('cart.store') }}";
+
+                $.ajax({
+                    url:path,
+                    type:'post',
+                    dataType:"JSON",
+                    data:{
+                        product_id:product_id,
+                        product_qty:product_qty,
+                        _token:token
+                    },
+                    beforeSend:function(){
+                        $('#product_id'+product_id).html('<i class="fa fa-spinner fa-spin"></i>');
+                    },
+                    complete:function(){
+                        $('#add_to_cart'+product_id).html('<i class="fa fa-cart-plus "></i>Add to Cart');
+                    },
+                    success:function(data){
+                        console.log(data);
+                        $('body #header-ajax').html(data['header']);
+                        $('body #cart_counter').html(data['cart_count']);
+                        if (data['status']) {
+                            swal({
+                                title: "Good job!",
+                                text: data['message'],
+                                icon: "success",
+                                button: "Okay!",
+                                });
+                        }
+                    }
+                });
+                
+            });
+        </script>
+    {{-- add to cart --}}
     <script>
         function loadermore(page){
             $.ajax({
@@ -302,4 +345,46 @@
             
         }
     </script>
+    {{-- add to wishlist --}}
+<script>
+    $(document).on('click', '.add_to_wishlist',function(e){
+        e.preventDefault();
+        var product_id = $(this).data('id');
+        var product_qty = $(this).data('quantity');
+        var token = "{{ csrf_token() }}";
+        var path = "{{ route('wishlist.store') }}";
+
+        $.ajax({
+            url:path,
+            type:'post',
+            dataType:"JSON",
+            data:{
+                product_id:product_id,
+                product_qty:product_qty,
+                _token:token
+            },
+            beforeSend:function(){
+                $('#add_to_wishlist'+product_id).html('<i class="fa fa-spinner fa-spin"></i>');
+            },
+            complete:function(){
+                $('#add_to_wishlist'+product_id).html('<i class="fa fa-heart"></i>');
+            },
+            success:function(data){
+                console.log(data);
+                $('body #header-ajax').html(data['header']);
+                $('body #cart_counter').html(data['cart_count']);
+                if (data['status']) {
+                    swal({
+                        title: "Good job!",
+                        text: data['message'],
+                        icon: "success",
+                        button: "Okay!",
+                        });
+                }
+            }
+        });
+        
+    });
+</script>
+    {{-- add to wishlist --}}
 @endsection

@@ -165,4 +165,50 @@ class IndexController extends Controller
        }
        
     }
+
+    public function shippingAddress(Request $request, $id){
+        $user = User::where('id', $id)->update(['scountry'=> $request->scountry, 'scity'=>$request->scity, 'sstate'=>$request->scity, 'spostcode'=>$request->spostcode, 'saddress'=>$request->saddress]);
+       if ($user) {
+        # code...
+        return back()->with('success', 'Shipping Address saved successfully!');
+       } else {
+        # code...
+        return back()->with('error', 'something went wrong!');
+       }
+       
+    }
+
+    public function updateAccount(Request $request, $id){
+        $this->validate($request, [
+            'newpassword' => 'min:4',
+            'oldpassword' => 'min:4',
+            'username' => 'string',
+            'full_name' => 'required',
+            'phone' => 'nullable|min:8'
+        ]);
+        $hashpassword = Auth::user()->password;
+        if ($request->oldpassword == null && $request->newpassword == null) {
+            # code...
+            User::where('id', $id)->update(['Full_name'=>$request->full_name, 'username' => $request->username,'phone'=>$request->phone]);
+            return back()->with('success','Account updated successfully!');
+        }else{
+            
+            if (\Hash::check($request->oldpassword, $hashpassword)) {
+                # code...
+             
+                if (!\Hash::check($request->newpassword, $hashpassword)) {
+                    # code...
+                    
+                    User::where('id', $id)->update(['Full_name'=>$request->full_name, 'username' => $request->username,'phone'=>$request->phone, 'password'=> $request->newpassword]);
+                    return back()->with('success','Account updated successfully!');
+                }else{
+                    return back()->with('error', 'New password should be different from the old!');
+                }
+            }else{
+               
+                return back()->with('error','old password do not match!');
+            }
+            
+        }
+    }
 }

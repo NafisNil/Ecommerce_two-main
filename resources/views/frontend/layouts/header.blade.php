@@ -1,4 +1,4 @@
-<header class="header_area">
+
     <!-- Top Header Area -->
     <div class="top-header-area">
         <div class="container h-100">
@@ -121,57 +121,53 @@
                         </div>
                         <!-- Wishlist -->
                         <div class="wishlist-area">
-                            <a href="bigshop-2.3.0/wishlist.html" class="wishlist-btn"><i class="icofont-heart"></i></a>
+                            <a href="{{ route('wishlist') }}" class="wishlist-btn"><i class="icofont-heart"></i></a>
                         </div>
                         <!-- Cart -->
                         <div class="cart-area">
-                            <div class="cart--btn"><i class="icofont-cart"></i> <span class="cart_quantity">2</span></div>
+                            <div class="cart--btn"><i class="icofont-cart"></i> <span class="cart_quantity" id="cart-counter">{{ Cart::instance('shopping')->count() }}</span></div>
                             <!-- Cart Dropdown Content -->
                             <div class="cart-dropdown-content">
                                 <ul class="cart-list">
+                                    @foreach (Cart::instance('shopping')->content() as $item)
                                     <li>
                                         <div class="cart-item-desc">
                                             <a href="#" class="image">
-                                                <img src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/top-1.png" class="cart-thumb" alt="">
+                                                <img src="{{ $item->model->photo }}" class="cart-thumb" alt="">
                                             </a>
                                             <div>
-                                                <a href="#">Kid's Fashion</a>
-                                                <p>1 x - <span class="price">$32.99</span></p>
+                                                <a href="{{ route('product.details', $item->model->slug) }}">{{ $item->name }}</a>
+                                                <p>{{ $item->qty }} - <span class="price">${{ number_format($item->price, 2) }}</span></p>
                                             </div>
                                         </div>
-                                        <span class="dropdown-product-remove"><i class="icofont-bin"></i></span>
+                                        <span class="dropdown-product-remove cart_delete" data-id="{{ $item->rowId }}"><i class="icofont-bin"></i></span>
                                     </li>
-                                    <li>
-                                        <div class="cart-item-desc">
-                                            <a href="#" class="image">
-                                                <img src="{{ asset('frontend') }}/bigshop-2.3.0/img/product-img/best-4.png" class="cart-thumb" alt="">
-                                            </a>
-                                            <div>
-                                                <a href="#">Headphone</a>
-                                                <p>2x - <span class="price">$49.99</span></p>
-                                            </div>
-                                        </div>
-                                        <span class="dropdown-product-remove"><i class="icofont-bin"></i></span>
-                                    </li>
+                                    @endforeach
                                 </ul>
                                 <div class="cart-pricing my-4">
                                     <ul>
                                         <li>
                                             <span>Sub Total:</span>
-                                            <span>$822.96</span>
+                                            <span>${{ Cart::subtotal() }}</span>
                                         </li>
-                                        <li>
+                                     {{--   <li>
                                             <span>Shipping:</span>
                                             <span>$30.00</span>
-                                        </li>
+                                        </li>--}}
                                         <li>
                                             <span>Total:</span>
-                                            <span>$856.63</span>
+                                            @if (session()->has('coupon'))
+                                            <span>${{ Cart::subtotal() - session('coupon')['value'] }} </span>
+                                            @else
+                                                 <span>${{ Cart::subtotal() }}</span>
+                                            @endif
+                                           
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="cart-box">
-                                    <a href="bigshop-2.3.0/checkout-1.html" class="btn btn-primary d-block">Checkout</a>
+                                <div class="cart-box d-flex">
+                                    <a href="{{ route('cart') }}" class="btn btn-success btn-sm mr-2">Cart</a>
+                                    <a href="bigshop-2.3.0/checkout-1.html" class="btn btn-primary btn-sm float-right">Checkout</a>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +183,7 @@
                             </div>
                             <ul class="user-meta-dropdown">
                                 @auth
-                                    <li class="user-title"><span>Hello,</span> Lim Sarah</li>
+                                    <li class="user-title"><span>Hello,</span> {{ auth()->user()->full_name }}</li>
                                     <li><a href="{{ route('user.dashboard') }}">My Account</a></li>
                                     <li><a href="{{ route('user.order') }}">Orders List</a></li>
                                     <li><a href="bigshop-2.3.0/wishlist.html">Wishlist</a></li>
@@ -204,4 +200,3 @@
             </div>
         </div>
     </div>
-</header>

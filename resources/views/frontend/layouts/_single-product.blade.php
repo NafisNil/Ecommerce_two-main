@@ -23,7 +23,7 @@
           </div>
           <!-- Wishlist -->
           <div class="product_wishlist">
-              <a href="../bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
+              <a href="javascript:void(0);" class="add_to_wishlist" data-quantity='1' data-id='{{ $item->id }}' id="add_to_wishlist{{ $item->id }}"><i class="fa fa-heart"></i></a>
           </div>
           <!-- Compare -->
           <div class="product_compare">
@@ -34,7 +34,7 @@
       <div class="product_description">
           <!-- Add to cart -->
           <div class="product_add_to_cart">
-              <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
+              <a href="#" class="add_to_cart" data-quantity='1' data-product-id="{{ $item->id }}"  id="add_to_cart{{ $item->id }}"><i class="icofont-shopping-cart "></i> Add to Cart</a>
           </div>
           <!-- Quick View -->
           <div class="product_quick_view">
