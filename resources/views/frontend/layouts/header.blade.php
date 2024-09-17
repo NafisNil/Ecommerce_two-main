@@ -121,7 +121,7 @@
                         </div>
                         <!-- Wishlist -->
                         <div class="wishlist-area">
-                            <a href="{{ route('wishlist') }}" class="wishlist-btn"><i class="icofont-heart"></i></a>
+                            <a href="{{ route('wishlist') }}" class="wishlist-btn" id='wishlist_counter'><i class="icofont-heart">{{ Cart::instance('wishlist')->count() }}</i></a>
                         </div>
                         <!-- Cart -->
                         <div class="cart-area">

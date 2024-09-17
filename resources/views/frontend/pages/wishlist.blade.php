@@ -25,111 +25,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="cart-table wishlist-table">
-                            <div class="table-responsive">
-                                <table class="table table-bordered mb-30">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><i class="icofont-ui-delete"></i></th>
-                                            <th scope="col">Image</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Unit Price</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <i class="icofont-close"></i>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-1.png" alt="Product">
-                                            </td>
-                                            <td>
-                                                <a href="#">Bluetooth Speaker</a>
-                                            </td>
-                                            <td>$9</td>
-                                            <td>
-                                                <div class="quantity">
-                                                    <input type="number" class="qty-text" id="qty2" step="1" min="1" max="99" name="quantity" value="1">
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">Add to Cart</a></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <i class="icofont-close"></i>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-2.png" alt="Product">
-                                            </td>
-                                            <td>
-                                                <a href="#">Roof Lamp</a>
-                                            </td>
-                                            <td>$11</td>
-                                            <td>
-                                                <div class="quantity">
-                                                    <input type="number" class="qty-text" id="qty3" step="1" min="1" max="99" name="quantity" value="1">
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">Add to Cart</a></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <i class="icofont-close"></i>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-6.png" alt="Product">
-                                            </td>
-                                            <td>
-                                                <a href="#">Cotton T-shirt</a>
-                                            </td>
-                                            <td>$6</td>
-                                            <td>
-                                                <div class="quantity">
-                                                    <input type="number" class="qty-text" id="qty4" step="1" min="1" max="99" name="quantity" value="1">
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">Add to Cart</a></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <i class="icofont-close"></i>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-4.png" alt="Product">
-                                            </td>
-                                            <td>
-                                                <a href="#">Water Bottle</a>
-                                            </td>
-                                            <td>$17</td>
-                                            <td>
-                                                <div class="quantity">
-                                                    <input type="number" class="qty-text" id="qty5" step="1" min="1" max="99" name="quantity" value="1">
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">Add to Cart</a></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <i class="icofont-close"></i>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-5.png" alt="Product">
-                                            </td>
-                                            <td>
-                                                <a href="#">Alka Sliper</a>
-                                            </td>
-                                            <td>$13</td>
-                                            <td>
-                                                <div class="quantity">
-                                                    <input type="number" class="qty-text" id="qty6" step="1" min="1" max="99" name="quantity" value="1">
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">Add to Cart</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="table-responsive" id="wishlist_list">
+                               @include('frontend.layouts._wishlist')
                             </div>
                         </div>
     
@@ -139,4 +36,101 @@
             </div>
         </div>
         <!-- Wishlist Table Area -->
+@endsection
+
+@section('scripts')
+    <script>
+        $('.move-to-card').on('click', function(e){
+            e.preventDefault();
+            var rowId = $(this).data('id');
+            var token = "{{ csrf_token() }}";
+            var path = "{{ route('wishlist.move.cart') }}";
+
+            $.ajax({
+                url:path,
+                type:'POST',
+                data:{
+                    _token:token,
+                    rowId:rowId
+                },
+                beforeSend:function(){
+                    $(this).html('<i class="fa fa-spinner fa-spin"></i>Add To Cart');
+                },
+                success:function(data){
+                    if (data['status']) {
+                        $('body #cart_counter').html(data['cart_count']);
+                        $('body #wishlist_list').html(data['wishlist_list']);
+                        $('body #header-ajax').html(data['header']);
+                        swal({
+                        title: "Oksy!",
+                        text: data['message'],
+                        icon: "success",
+                        button: "Okay!",
+                        });
+                    }else{
+                        swal({
+                        title: "Oops!",
+                        text: data['message'],
+                        icon: "error",
+                        button: "Okay!",
+                        });
+                    }
+                },
+                error:function(err){
+                    swal({
+                        title: "Oops!",
+                        text: "Something went wrong!",
+                        icon: "error",
+                        button: "Okay!",
+                        });
+                }
+            });
+        });
+    </script>
+
+<script>
+    $('.delete_wishlist').on('click', function(e){
+        e.preventDefault();
+        var rowId = $(this).data('id');
+        var token = "{{ csrf_token() }}";
+        var path = "{{ route('wishlist.delete') }}";
+
+        $.ajax({
+            url:path,
+            type:'POST',
+            data:{
+                _token:token,
+                rowId:rowId
+            },
+            success:function(data){
+                if (data['status']) {
+                    $('body #cart_counter').html(data['cart_count']);
+                    $('body #wishlist_list').html(data['wishlist_list']);
+                    $('body #header-ajax').html(data['header']);
+                    swal({
+                    title: "Oksy!",
+                    text: data['message'],
+                    icon: "success",
+                    button: "Okay!",
+                    });
+                }else{
+                    swal({
+                    title: "Oops!",
+                    text: data['message'],
+                    icon: "error",
+                    button: "Okay!",
+                    });
+                }
+            },
+            error:function(err){
+                swal({
+                    title: "Oops!",
+                    text: "Something went wrong!",
+                    icon: "error",
+                    button: "Okay!",
+                    });
+            }
+        });
+    });
+</script>
 @endsection

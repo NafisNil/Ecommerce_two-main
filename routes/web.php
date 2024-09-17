@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\frontend\IndexController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\WishlistController;
+use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\CouponController;
 /*
 |--------------------------------------------------------------------------
@@ -81,4 +82,7 @@ Route::group(['prefix'=>'user'], function(){
     Route::post('cart/update',[CartController::class, 'cartUpdate'])->name('cart.update');
     Route::get('wishlist', [WishlistController::class, 'wishlist'])->name('wishlist');
     Route::post('wishlist/store', [WishlistController::class, 'wishlistStore'])->name('wishlist.store');
+    Route::post('wishlist/move-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.move.cart');
+    Route::post('wishlist/delete', [WishlistController::class, 'wishlistDelete'])->name('wishlist.delete');
+    Route::get('checkout',[CheckoutController::class, 'checkout'])->name('checkout')->middleware('user');
 });

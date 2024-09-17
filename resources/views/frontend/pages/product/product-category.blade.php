@@ -46,7 +46,7 @@
                                             <button type="submit" name="addtocart" value="5" class="cart-submit">Add to cart</button>
                                             <!-- Wishlist -->
                                             <div class="modal_pro_wishlist">
-                                                <a href="../bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
+                                                <a href="javascript.void(0)" ><i class="icofont-heart"></i></a>
                                             </div>
                                             <!-- Compare -->
                                             <div class="modal_pro_compare">
@@ -279,6 +279,7 @@
                 e.preventDefault();
                 var product_id = $(this).data('product-id');
                 var product_qty = $(this).data('quantity');
+               
                 var token = "{{ csrf_token() }}";
                 var path = "{{ route('cart.store') }}";
 
@@ -351,6 +352,7 @@
         e.preventDefault();
         var product_id = $(this).data('id');
         var product_qty = $(this).data('quantity');
+      
         var token = "{{ csrf_token() }}";
         var path = "{{ route('wishlist.store') }}";
 
@@ -372,12 +374,28 @@
             success:function(data){
                 console.log(data);
                 $('body #header-ajax').html(data['header']);
-                $('body #cart_counter').html(data['cart_count']);
+                $('body #wishlist_counter').html('<i class="icofont-heart">'+data['wishlist_count']);
                 if (data['status']) {
                     swal({
                         title: "Good job!",
                         text: data['message'],
                         icon: "success",
+                        button: "Okay!",
+                        });
+                }else if($data['present']){
+                    $('body #header-ajax').html(data['header']);
+                    $('body #wishlist_counter').html(data['wishlist_count']);
+                    swal({
+                        title: "Ow!",
+                        text: data['message'],
+                        icon: "warning",
+                        button: "Okay!",
+                        });
+                }else{
+                    swal({
+                        title: "Good job!",
+                        text: "Can't be added!",
+                        icon: "error",
                         button: "Okay!",
                         });
                 }
