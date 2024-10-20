@@ -150,12 +150,13 @@ class IndexController extends Controller
     }
 
     public function userAccount(){
+        Session::put('url.intended', URL::previous);
         $user = Auth::user();
         return view('frontend.user.account',compact('user'));
     }
 
     public function billingAddress(Request $request, $id){
-        $user = User::where('id', $id)->update(['country'=> $request->country, 'city'=>$request->city, 'state'=>$request->city, 'postcode'=>$request->postcode]);
+        $user = User::where('id', $id)->update(['country'=> $request->country, 'city'=>$request->city, 'state'=>$request->state, 'postcode'=>$request->postcode, 'address' => $request->address]);
        if ($user) {
         # code...
         return back()->with('success', 'Address saved successfully!');
@@ -210,5 +211,72 @@ class IndexController extends Controller
             }
             
         }
+    }
+
+    public function shop(Request $request){
+        $products = Product::query();
+        if (!empty($_GET['category'])) {
+            # code...
+            $slugs  =explode(',',$_GET['category']);
+            $cats_id  = Category::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
+            $products = $products->whereIn('cat_id', $cats_id)->paginate(9);
+           // return $products;
+        }
+        $sort =$_GET['sortBy'];
+        if (!empty($sort)) {
+            # code...
+            if ($sort == "priceAsc") {
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('offer_price','asc')->paginate(12);
+            } elseif ($sort == "priceDesc") {
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('offer_price','desc')->paginate(12);
+            } 
+            elseif ($sort == "discAsc") {
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('discount','asc')->paginate(12);
+            } 
+            elseif ($sort == "discDesc") {
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('discount','desc')->paginate(12);
+            } 
+            elseif ($sort == "titleDesc") {
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('title','desc')->paginate(12);
+            } else{
+                # code...
+                $products = Product::where(['status'=>'active', 'cat_id'=>$category->id])->orderBy('title','asc')->paginate(12);
+            }
+        }
+        else{
+            $products = Product::where('status', 'active')->paginate(9);
+        }
+        $cats  = Category::where('status','active')->where('is_parent',1)->with('products')->orderBy('title','asc')->get();
+        return view('frontend.pages.product.shop', compact('products', 'cats'));
+    }
+
+    public function shopFilter(Request $request){
+        $data = $request->all();
+        $catUrl = "";
+        if (!empty($data['category'])) {
+            # code...
+            foreach ($data['category'] as $key => $category) {
+                # code...
+                if (empty($catUrl)) {
+                    # code...
+                    $catUrl .= "&category=".$category;
+                }else{
+                    $catUrl .=",".$category;
+                }
+            }
+        }
+       
+        $sortByUrl = "";
+        if (!empty($data['sortBy'])) {
+            # code...
+            $sortByUrl  .= "&sortBy=".$data['sortBy'];
+           
+        }
+        return \redirect()->route('shop', $catUrl.$sortByUrl);
     }
 }

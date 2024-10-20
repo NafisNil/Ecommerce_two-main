@@ -63,7 +63,7 @@
                                 <li><a href="{{ route('index') }}">Home</a>
                                     
                                 </li>
-                                <li><a href="#">Shop</a>
+                                <li><a href="{{ route('shop') }}">Shop</a>
                                 </li>
                                 <li><a href="#">Pages</a>
                                     <div class="megamenu">
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="cart-box d-flex">
                                     <a href="{{ route('cart') }}" class="btn btn-success btn-sm mr-2">Cart</a>
-                                    <a href="bigshop-2.3.0/checkout-1.html" class="btn btn-primary btn-sm float-right">Checkout</a>
+                                    <a href="{{ route('checkout1') }}" class="btn btn-primary btn-sm float-right">Checkout</a>
                                 </div>
                             </div>
                         </div>

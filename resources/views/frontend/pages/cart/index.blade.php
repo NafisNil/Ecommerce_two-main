@@ -55,24 +55,21 @@
                                 <tbody>
                                     <tr>
                                         <td>Sub Total</td>
-                                        <td>$56.00</td>
+                                        <td>${{ Cart::subtotal() }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Shipping</td>
-                                        <td>$10.00</td>
+                                        <td>Save Amount</td>
+                                        <td>${{ @Session::get('coupon')['value'] }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>VAT (10%)</td>
-                                        <td>$5.60</td>
-                                    </tr>
+                                  
                                     <tr>
                                         <td>Total</td>
-                                        <td>$71.60</td>
+                                        <td>${{ Cart::subtotal()  -@Session::get('coupon')['value'] }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <a href="checkout-1.html" class="btn btn-primary d-block">Proceed To Checkout</a>
+                        <a href="{{ route('checkout1') }}" class="btn btn-primary d-block">Proceed To Checkout</a>
                     </div>
                 </div>
             </div>

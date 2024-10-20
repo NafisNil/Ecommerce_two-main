@@ -12,6 +12,7 @@ use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\WishlistController;
 use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\ShippingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,6 +38,8 @@ Auth::routes(['register'=>false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/shop',[IndexController::class, 'shop'])->name('shop');
+Route::post('/shop-filter',[IndexController::class, 'shopFilter'])->name('shop.filter');
 //admin dashboard
 
 Route::group(['prefix'=>'admin', 'middleware'=> ['auth','admin']],function(){
@@ -47,7 +50,8 @@ Route::group(['prefix'=>'admin', 'middleware'=> ['auth','admin']],function(){
        'brand' => BrandController::class,
        'product' => ProductController::class,
        'user' => UserController::class,
-       'coupon' => CouponController::class
+       'coupon' => CouponController::class,
+       'shipping' => ShippingController::class
     ]);
     Route::post('banner_status',[BannerController::class, 'bannerStatus'])->name('banner.status');
     Route::post('category_status',[CategoryController::class, 'categoryStatus'])->name('category.status');
@@ -57,7 +61,7 @@ Route::group(['prefix'=>'admin', 'middleware'=> ['auth','admin']],function(){
     Route::post('user_status',[UserController::class, 'userStatus'])->name('user.status');
     Route::post('coupon_status',[CouponController::class, 'couponStatus'])->name('coupon.status');
     Route::post('coupon/add',[CouponController::class, 'couponAdd'])->name('coupon.add');
-
+    Route::post('shipping_status',[ShippingController::class, 'shippingStatus'])->name('shipping.status');
 });
 
 
@@ -84,5 +88,10 @@ Route::group(['prefix'=>'user'], function(){
     Route::post('wishlist/store', [WishlistController::class, 'wishlistStore'])->name('wishlist.store');
     Route::post('wishlist/move-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.move.cart');
     Route::post('wishlist/delete', [WishlistController::class, 'wishlistDelete'])->name('wishlist.delete');
-    Route::get('checkout',[CheckoutController::class, 'checkout'])->name('checkout')->middleware('user');
+    Route::get('checkout1',[CheckoutController::class, 'checkout1'])->name('checkout1')->middleware('user');
+    Route::post('checkout-first',[CheckoutController::class, 'checkout1Store'])->name('checkout1.store');
+    Route::post('checkout-second',[CheckoutController::class, 'checkout2Store'])->name('checkout2.store');
+    Route::post('checkout-third',[CheckoutController::class, 'checkout3Store'])->name('checkout3.store');
+    Route::get('checkout-store',[CheckoutController::class, 'checkout'])->name('checkout.store');
+    Route::get('checkout-complete/{order}',[CheckoutController::class, 'complete'])->name('complete');
 });

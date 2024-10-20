@@ -270,25 +270,26 @@
 
             </ul>
           </li>
+
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Post Category
+                Shipping
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="{{ route('shipping.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Departments</p>
+                  <p>All Shipping</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="{{ route('shipping.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Departments</p>
+                  <p>Add Shipping</p>
                 </a>
               </li>
 

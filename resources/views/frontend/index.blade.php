@@ -167,7 +167,7 @@
                                 </div>
                                 <!-- Wishlist -->
                                 <div class="product_wishlist">
-                                    <a href="bigshop-2.3.0/wishlist.html"><i class="icofont-heart"></i></a>
+                                    <a href="javascript:void(0);" class="add_to_wishlist" data-quantity='1' data-id='{{ $item->id }}' id="add_to_wishlist{{ $item->id }}"><i class="icofont-heart"></i></a>
                                 </div>
                                 <!-- Compare -->
                                 <div class="product_compare">
@@ -178,7 +178,7 @@
                             <div class="product_description">
                                 <!-- Add to cart -->
                                 <div class="product_add_to_cart">
-                                    <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
+                                    <a href="javascript:void(0);" class="add_to_cart" data-quantity='1' data-product-id="{{ $item->id }}"  id="add_to_cart{{ $item->id }}"><i class="icofont-shopping-cart"></i> Add to Cart</a>
                                 </div>
                                 <!-- Quick View -->
                                 <div class="product_quick_view">
@@ -242,7 +242,7 @@
                         <div class="product_description">
                             <!-- Add to cart -->
                             <div class="product_add_to_cart">
-                                <a href="#"><i class="icofont-shopping-cart"></i> Add to Cart</a>
+                                <a href="javascript:void(0);" class="add_to_cart" data-quantity='1' data-product-id="{{ $item->id }}"  id="add_to_cart{{ $item->id }}"><i class="icofont-shopping-cart"></i> Add to Cart</a>
                             </div>
                             <!-- Quick View -->
                             <div class="product_quick_view">
@@ -1224,4 +1224,107 @@
     </div>
 </section>
 <!-- Special Featured Area -->
+@endsection
+
+@section('scripts')
+<script>
+    $(document).on('click', '.add_to_cart',function(e){
+        e.preventDefault();
+        var product_id = $(this).data('product-id');
+        var product_qty = $(this).data('quantity');
+       
+        var token = "{{ csrf_token() }}";
+        var path = "{{ route('cart.store') }}";
+
+        $.ajax({
+            url:path,
+            type:'post',
+            dataType:"JSON",
+            data:{
+                product_id:product_id,
+                product_qty:product_qty,
+                _token:token
+            },
+            beforeSend:function(){
+                $('#product_id'+product_id).html('<i class="fa fa-spinner fa-spin"></i>');
+            },
+            complete:function(){
+                $('#add_to_cart'+product_id).html('<i class="fa fa-cart-plus "></i>Add to Cart');
+            },
+            success:function(data){
+                console.log(data);
+                $('body #header-ajax').html(data['header']);
+                $('body #cart_counter').html(data['cart_count']);
+                if (data['status']) {
+                    swal({
+                        title: "Good job!",
+                        text: data['message'],
+                        icon: "success",
+                        button: "Okay!",
+                        });
+                }
+            }
+        });
+        
+    });
+</script>
+
+    {{-- add to wishlist --}}
+    <script>
+        $(document).on('click', '.add_to_wishlist',function(e){
+            e.preventDefault();
+            var product_id = $(this).data('id');
+            var product_qty = $(this).data('quantity');
+          
+            var token = "{{ csrf_token() }}";
+            var path = "{{ route('wishlist.store') }}";
+    
+            $.ajax({
+                url:path,
+                type:'post',
+                dataType:"JSON",
+                data:{
+                    product_id:product_id,
+                    product_qty:product_qty,
+                    _token:token
+                },
+                beforeSend:function(){
+                    $('#add_to_wishlist'+product_id).html('<i class="fa fa-spinner fa-spin"></i>');
+                },
+                complete:function(){
+                    $('#add_to_wishlist'+product_id).html('<i class="fa fa-heart"></i>');
+                },
+                success:function(data){
+                    console.log(data);
+                    $('body #header-ajax').html(data['header']);
+                    $('body #wishlist_counter').html('<i class="icofont-heart">'+data['wishlist_count']);
+                    if (data['status']) {
+                        swal({
+                            title: "Good job!",
+                            text: data['message'],
+                            icon: "success",
+                            button: "Okay!",
+                            });
+                    }else if($data['present']){
+                        $('body #header-ajax').html(data['header']);
+                        $('body #wishlist_counter').html(data['wishlist_count']);
+                        swal({
+                            title: "Ow!",
+                            text: data['message'],
+                            icon: "warning",
+                            button: "Okay!",
+                            });
+                    }else{
+                        swal({
+                            title: "Good job!",
+                            text: "Can't be added!",
+                            icon: "error",
+                            button: "Okay!",
+                            });
+                    }
+                }
+            });
+            
+        });
+    </script>
 @endsection
